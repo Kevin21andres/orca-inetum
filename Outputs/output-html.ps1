@@ -163,24 +163,33 @@ class html : ORCAOutput
             color: #5bc0de
         }
         
+        .bg-info{
+            background-color: #107c10 !important /* He añadido este stylo para cambiar el color de la barra de recarga*/
+        }
+
+        .bg-success{
+            background-color: #107c10 !important /* He añadido este stylo para cambiar el color de la barra de recarga*/
+        }
+
         .bd-callout-warning {
-            border-left-color: #f0ad4e
+            border-left-color: #fdb800 /* He cambiado el color al #fdb800 */
         }
         
+
         .bd-callout-warning h4 {
-            color: #f0ad4e
+            color: #fdb800 /* He cambiado el color al #fdb800 */
         }
         
         .bd-callout-danger {
-            border-left-color: #d9534f
+            border-left-color: #f04641 /* He cambiado el color */
         }
         
         .bd-callout-danger h4 {
-            color: #d9534f
+            color: #f04641 /* He cambiado el color*/
         }
 
         .bd-callout-success {
-            border-left-color: #00bd19
+            border-left-color: #00aa9b
         }
 
         .navbar-custom { 
@@ -266,8 +275,8 @@ class html : ORCAOutput
             <div class='container-fluid'>
                 <div class='col-sm' style='text-align:left'>
                     <div class='row'>
-                        <div class='col col-md-auto'><i class='fas fa-binoculars'></i></div>
-                        <div class='col'><strong>ORCA</strong></div>
+                        <div class='col col-md-auto'><img src="LOGO_INETUM.png" alt="logo" style="width: 30%;" ></div>
+                        <div class='col'><strong>Inetum</strong></div>
                     </div>
                 </div>
                 <div class='col-sm' style='text-align:center'>
@@ -282,7 +291,7 @@ class html : ORCAOutput
             <div class='app-body p-3'>
             <main class='main'>
                 <!-- Main content here -->
-                <div class='container' style='padding-top:50px;'></div>
+                <div class='container' style='padding-top:6em;'></div>
                 <div class='card'>
                         
                         <div class='card-body'>
@@ -446,7 +455,7 @@ $Output +=        "<div class='col d-flex justify-content-center text-center'>
     {
             $Output += "
     <div class='card text-white bg-secondary mb-3'>
-        <div class='card-header'>ORCA needs your assistance..</div>
+        <div class='card-header'>ORCA needs your assistance.. esto es una prueba</div>
         <div class='card-body'>
             <div class='row'>
                 <div class='col-md-auto'>
