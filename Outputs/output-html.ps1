@@ -202,6 +202,11 @@ class html : ORCAOutput
 
             
         } 
+
+        .text-bg-info {
+            background-color: #00aa9b !important; /* He añadido este estilo para cambiar el color de la barra de recarga */
+        }
+
         /* Modify brand and text color */ 
           
         .navbar-custom .navbar-brand, 
@@ -271,6 +276,14 @@ class html : ORCAOutput
             text-shadow: 0 0 1px #333;
           }         
         </style>
+        <script>
+            window.onload = function () {
+                // Espera un momento a que cargue el contenido
+                setTimeout(() => {
+                    window.print();
+                }, 500); // 0.5 segundos de retardo por seguridad
+            };
+        </script>
 
         <title>$($ReportTitle)</title>
 
@@ -392,11 +405,6 @@ $Output +=        "<div class='col d-flex justify-content-center text-center'>
                         </div>
                     </div>
                 </div>
-
-                <div>
-                    <canvas id='chartOverview' height='80'></canvas>
-                </div>
-
             </div>"
 
     <#
@@ -756,7 +764,7 @@ $Output +=        "<div class='col d-flex justify-content-center text-center'>
                                     {
                                         $PolicyPills += "
                                             <div class='flex-row badge badge-pill text-bg-info'>
-                                                <span style='vertical-align: middle;'>Política de protección integrada</span>
+                                                <span style='vertical-align: middle;'>Pol&iacute;tica de protecci&oacute;n integrada</span>
                                             </div>"
                                     }
 
@@ -849,7 +857,7 @@ $Output +=        "<div class='col d-flex justify-content-center text-center'>
                                     <div class='d-flex justify-content-end'>
                                 "
 
-                                if($($o.InfoText) -match "Esta es una política predeterminada/integrada")
+                                if($($o.InfoText) -match "Esta es una pol&iacute;tica predeterminada/integrada")
                                 {
                                     $Output += "
                                     <div class='flex-row badge badge-pill text-bg-light'>
@@ -860,7 +868,7 @@ $Output +=        "<div class='col d-flex justify-content-center text-center'>
                                     $Output += "<p style='margin-top:5px;color:#005494;'><abbr title='$($o.InfoText)'><u>More Info</u></abbr></p></div>"
                                     
                                 }
-                                elseif($($o.InfoText) -match "La política no está habilitada y no se aplicará.")
+                                elseif($($o.InfoText) -match "La pol&iacute;tica no está habilitada y no se aplicará.")
                                 {
                                     $Output += "
                                     <div class='flex-row badge badge-pill text-bg-light'>
