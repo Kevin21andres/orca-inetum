@@ -1003,7 +1003,7 @@ $Output +=        "<div class='col d-flex justify-content-center text-center'>
 
         $OutputDir = $this.GetOutputDir();
 
-        $ReportFileName = "ORCA-$($tenant)-$(Get-Date -Format 'yyyyMMddHHmm').html"
+        $ReportFileName = "Inetum-$($tenant)-$(Get-Date -Format 'yyyyMMddHHmm').html"
 
         $OutputFile = "$OutputDir\$ReportFileName"
 
