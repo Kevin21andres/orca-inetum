@@ -124,11 +124,15 @@ class ORCA226 : ORCACheck
                         if($IsBuiltIn)
                         {
                             $ConfigObject.InfoText = "This is a Built-In/Default policy managed by Microsoft and therefore cannot be edited. Other policies are set up in this area. It is being flagged only for informational purpose."
-                            $ConfigObject.SetResult([ORCAConfigLevel]::Informational,"Fail")
+                            $ConfigObject.SetResult([ORCAConfigLevel]::Standard, [ORCAResult]::Informational)
+
+
                         }
                         else
                         {
-                            $ConfigObject.SetResult([ORCAConfigLevel]::Standard,"Pass")
+                            $ConfigObject.SetResult([ORCAConfigLevel]::Standard, [ORCAResult]::Informational)
+
+
                         }
                     }
                     else
@@ -136,13 +140,17 @@ class ORCA226 : ORCACheck
                         if($IsBuiltIn)
                         {
                             $ConfigObject.InfoText = "This is a Built-In/Default policy managed by Microsoft and therefore cannot be edited. Other policies are set up in this area. It is being flagged only for informational purpose."
-                            $ConfigObject.SetResult([ORCAConfigLevel]::Informational,"Fail")
+                            $ConfigObject.SetResult([ORCAConfigLevel]::Standard, [ORCAResult]::Informational)
+
+
                         }
                         else
                         {
                         # Additional policies based on the priority should be listed as informational
                             $ConfigObject.InfoText = "There are multiple policies that apply to this domain, only the policy with the lowest priority will apply. This policy may not apply based on a lower priority."
-                            $ConfigObject.SetResult([ORCAConfigLevel]::Informational,"Fail")
+                            $ConfigObject.SetResult([ORCAConfigLevel]::Standard, [ORCAResult]::Informational)
+
+
                         }
                     }    
 
@@ -157,7 +165,9 @@ class ORCA226 : ORCACheck
 
                 $ConfigObject.Object=$($AcceptedDomain.Name)
                 $ConfigObject.ConfigItem="No Policy Applying"
-                $ConfigObject.SetResult([ORCAConfigLevel]::Standard,"Fail")            
+                $ConfigObject.SetResult([ORCAConfigLevel]::Standard, [ORCAResult]::Informational)
+
+        
     
                 $this.AddConfig($ConfigObject)     
             }
