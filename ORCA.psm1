@@ -558,7 +558,12 @@ Function Get-ORCAOutputs
             {
                 Write-Verbose "Importing $($matches[1])"
                 . $OutputFile.FullName
-                $Output = New-Object -TypeName $matches[1]
+                # Fuerza compilación previa de clases con Add-Type hack si falla
+                try {
+                    $Output = New-Object -TypeName $matches[1]
+                } catch {
+                    throw "Error: No se pudo crear el objeto del tipo [$($matches[1])]. Verifica que la clase '$($matches[1])' esté correctamente definida en '$($OutputFile.FullName)'."
+                }
 
                 # Load any of the options in to the module
                 If($Options)

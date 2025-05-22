@@ -3,9 +3,15 @@ using module "..\ORCA.psm1"
 class html : ORCAOutput
 {
 
-    $OutputDirectory=$null
-    $DisplayReport=$True
-    $EmbedConfiguration=$false
+    [string]$OutputDirectory
+    [bool]$DisplayReport = $true
+    [bool]$EmbedConfiguration = $false
+    [string]$DefaultOutputDirectory
+    [object]$VersionCheck
+    [bool]$ShowSurvey
+    [bool]$Completed
+    [string]$Result
+
 
     html()
     {
@@ -42,7 +48,6 @@ class html : ORCAOutput
     $AreaIcon["Malware Filter Policy"] = "fas fa-biohazard"
     $AreaIcon["Zero Hour Autopurge"] = "fas fa-trash"
     $AreaIcon["DKIM"] = "fas fa-file-signature"
-    $AreaIcon["Transport Rules"] = "fas fa-list"
     $AreaIcon["Transport Rules"] = "fas fa-list"
 
     # Embed checks as JSON in to HTML file at beginning for charting/historic purposes
@@ -104,7 +109,7 @@ class html : ORCAOutput
 
     # Output start
     $output += "<!doctype html>
-    <html lang='en'>
+    <html lang='es'>
     <head>
         <!-- Required meta tags -->
         <meta charset='utf-8'>
@@ -113,6 +118,8 @@ class html : ORCAOutput
         <script src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js' integrity='sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE' crossorigin='anonymous'></script>
 
         <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ' crossorigin='anonymous'>
+        
+        <link href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap' rel='stylesheet'>
         <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js' integrity='sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe' crossorigin='anonymous'></script>
 
         <script src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous'></script>
@@ -123,8 +130,30 @@ class html : ORCAOutput
         <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
         <script src='https://cdn.jsdelivr.net/npm/moment@2.27.0'></script>
         <script src='https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@0.1.1'></script>
-        
+
         <style>
+        
+        .card-group .card {
+            transition: transform 0.3s ease;
+        }
+        .card-group .card:hover {
+            transform: translateY(-5px);
+        }
+
+        body, p, td, th {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .card {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s ease-in-out;
+        }
+        .card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+        }
+
         .table-borderless td,
         .table-borderless th {
             border: 0;
@@ -217,7 +246,7 @@ class html : ORCAOutput
 
         } 
         body {
-            font-family: verdana; !important
+            font-family: 'Poppins', sans-serif !important;
         }
         .star-cb-group {
             /* remove inline-block whitespace */
@@ -281,14 +310,15 @@ class html : ORCAOutput
                 // Espera un momento a que cargue el contenido
                 setTimeout(() => {
                     window.print();
-                }, 500); // 0.5 segundos de retardo por seguridad
+                }, 1500); // 0.5 segundos de retardo por seguridad
             };
         </script>
 
         <title>$($ReportTitle)</title>
 
     </head>
-    <body class='app header-fixed bg-light'>
+    <body id='top' class='app header-fixed bg-light'>
+
 
         <nav class='navbar  fixed-top navbar-custom p-3 border-bottom d-print-block'>
             <div class='container-fluid'>
@@ -370,42 +400,39 @@ class html : ORCAOutput
 
     $Output += "
 
-                <div class='row p-3'>"
+                <div class='card-group p-3 text-center'>"
 
                 if($InfoCount -gt 0)
                 {
                     $Output += "
                     
-                            <div class='col d-flex justify-content-center text-center'>
-                                <div class='card text-white bg-secondary mb-3' style='width: 18em;'>
-                                    <div class='card-header'><h6>Informativo</h6></div>
-                                    <div class='card-body'>
+                            <div class='card shadow-sm text-white bg-secondary mx-2'>
+                                <div class='card-body'>
+                                    <i class='fas fa-info-circle fa-2x mb-2'></i>
+                                    <h6 class='card-title'>Informativo</h6>
                                     <h3>$($InfoCount)</h3>
-                                    </div>
                                 </div>
                             </div>
                     
                     "
                 }
 
-$Output +=        "<div class='col d-flex justify-content-center text-center'>
-                    <div class='card text-white bg-warning mb-3' style='width: 18rem;'>
-                        <div class='card-header'><h6>Recomendaciones</h6></div>
+$Output +=        "<div class='card shadow-sm text-white bg-warning mx-2'>
                         <div class='card-body'>
-                        <h3>$($RecommendationCount)</h3>
+                            <i class='fas fa-exclamation-triangle fa-2x mb-2'></i>
+                            <h6 class='card-title'>Recomendaciones</h6>
+                            <h3>$($RecommendationCount)</h3>
                         </div>
                     </div>
-                </div>
 
-                <div class='col d-flex justify-content-center text-center'>
-                    <div class='card text-white bg-success mb-3' style='width: 18rem;'>
-                        <div class='card-header'><h6>OK</h6></div>
+                    <div class='card shadow-sm text-white bg-success mx-2'>
                         <div class='card-body'>
-                        <h3>$($OKCount)</h3>
+                            <i class='fas fa-check-circle fa-2x mb-2'></i>
+                            <h6 class='card-title'>OK</h6>
+                            <h3>$($OKCount)</h3>
                         </div>
                     </div>
-                </div>
-            </div>"
+                </div>"
 
     <#
     
@@ -458,7 +485,7 @@ $Output +=        "<div class='col d-flex justify-content-center text-center'>
         <div class='card-body'>"
 
 
-    $Output += "<h5>Areas</h1>
+    $Output += "<h5>Areas</h5>
             <table class='table table-borderless'>"
     ForEach($Area in ($Checks | Where-Object {$_.Completed -eq $true} | Group-Object Area))
     {
@@ -649,7 +676,7 @@ $Output +=        "<div class='col d-flex justify-content-center text-center'>
                         If($Check.ExpandResults -eq $True) {
 
                             # We should expand the results by showing a table of Config Data and Items
-                            $Output +="<h6>Effected objects</h6>
+                            $Output +="<h6>Objetos afectados</h6>
                             <div class='row pl-2 pt-3'>
                                 <table class='table'>
                                     <thead class='border-bottom'>
@@ -965,6 +992,9 @@ $Output +=        "<div class='col d-flex justify-content-center text-center'>
     $Output += "
             </main>
             </div>
+            <a href='#top' class='btn btn-light shadow rounded-circle position-fixed bottom-0 end-0 m-4' title='Volver al inicio'>
+                <i class='fas fa-arrow-up'></i>
+            </a>
         </body>"
 
     <#
